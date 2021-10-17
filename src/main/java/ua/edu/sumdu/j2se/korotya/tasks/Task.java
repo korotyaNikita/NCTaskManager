@@ -2,7 +2,10 @@ package ua.edu.sumdu.j2se.korotya.tasks;
 
 public class Task {
     private String title;
-    private int time, start, end, interval;
+    private int time;
+    private int start;
+    private int end;
+    private int interval;
     private boolean active = false;
 
     public Task(String title, int time) {
