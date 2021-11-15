@@ -8,7 +8,10 @@ public class Task {
     private int interval;
     private boolean active = false;
 
-    public Task(String title, int time) {
+    public Task(String title, int time) throws IllegalArgumentException {
+        if (time < 0)
+            throw new IllegalArgumentException();
+
         this.title = title;
         this.time = time;
         start = time;
@@ -16,7 +19,10 @@ public class Task {
         interval = 0;
     }
 
-    public Task(String title, int start, int end, int interval) {
+    public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
+        if (start < 0 || end < 0 || interval < 0)
+            throw new IllegalArgumentException();
+
         this.title = title;
         this.start = start;
         this.end = end;

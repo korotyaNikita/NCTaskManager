@@ -4,7 +4,10 @@ public class ArrayTaskList {
     private Task[] tasks = new Task[10];
     private int size;
 
-    public void add(Task task) {
+    public void add(Task task) throws NullPointerException {
+        if(task == null)
+            throw new NullPointerException();
+
         if (size >= tasks.length) {
             Task[] tasksCopy = tasks;
             tasks = new Task[tasks.length * 2];
@@ -41,8 +44,11 @@ public class ArrayTaskList {
         return size;
     }
 
-    public Task getTask(int index) {
-        return index >= size ? null : tasks[index];
+    public Task getTask(int index) throws IndexOutOfBoundsException {
+        if (index >= size || index < 0)
+            throw new IndexOutOfBoundsException();
+
+        return tasks[index];
     }
 
     public ArrayTaskList incoming(int from, int to) {
