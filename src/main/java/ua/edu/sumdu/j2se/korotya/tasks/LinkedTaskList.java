@@ -1,6 +1,6 @@
 package ua.edu.sumdu.j2se.korotya.tasks;
 
-public class LinkedTaskList {
+public class LinkedTaskList extends AbstractTaskList {
     private Node first;
     private Node last;
     private int size;
@@ -15,6 +15,7 @@ public class LinkedTaskList {
         }
     }
 
+    @Override
     public void add(Task task) throws NullPointerException {
         if(task == null)
             throw new NullPointerException();
@@ -31,6 +32,7 @@ public class LinkedTaskList {
         size++;
     }
 
+    @Override
     public boolean remove(Task task) {
         for (Node temp = first; temp != null; temp = temp.next) {
             if (temp.task == task) {
@@ -53,10 +55,12 @@ public class LinkedTaskList {
         return false;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public Task getTask(int index) throws IndexOutOfBoundsException {
         if (index >= size || index < 0)
             throw new IndexOutOfBoundsException();
@@ -77,12 +81,8 @@ public class LinkedTaskList {
         return temp.task;
     }
 
-    public LinkedTaskList incoming(int from, int to) {
-        LinkedTaskList linkedTaskList = new LinkedTaskList();
-        for (Node temp = first; temp != null; temp = temp.next)
-            if (temp.task.nextTimeAfter(from) != -1 && temp.task.nextTimeAfter(to) == -1)
-                linkedTaskList.add(temp.task);
-
-        return linkedTaskList;
+    @Override
+    public ListTypes.types getType() {
+        return ListTypes.types.LINKED;
     }
 }
