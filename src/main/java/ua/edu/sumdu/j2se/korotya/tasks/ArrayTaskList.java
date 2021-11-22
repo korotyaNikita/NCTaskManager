@@ -1,9 +1,10 @@
 package ua.edu.sumdu.j2se.korotya.tasks;
 
-public class ArrayTaskList {
+public class ArrayTaskList extends AbstractTaskList {
     private Task[] tasks = new Task[10];
     private int size;
 
+    @Override
     public void add(Task task) throws NullPointerException {
         if(task == null)
             throw new NullPointerException();
@@ -19,6 +20,7 @@ public class ArrayTaskList {
         size++;
     }
 
+    @Override
     public boolean remove(Task task) {
         int index = -1;
         for (int i = 0; i < size; i++)
@@ -40,10 +42,12 @@ public class ArrayTaskList {
         return true;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public Task getTask(int index) throws IndexOutOfBoundsException {
         if (index >= size || index < 0)
             throw new IndexOutOfBoundsException();
@@ -51,12 +55,8 @@ public class ArrayTaskList {
         return tasks[index];
     }
 
-    public ArrayTaskList incoming(int from, int to) {
-        ArrayTaskList arrayTaskList = new ArrayTaskList();
-        for (int i = 0; i < size; i++)
-            if (tasks[i].nextTimeAfter(from) != -1 && tasks[i].nextTimeAfter(to) == -1)
-                arrayTaskList.add(tasks[i]);
-
-        return arrayTaskList;
+    @Override
+    public ListTypes.types getType() {
+        return ListTypes.types.ARRAY;
     }
 }
