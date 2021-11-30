@@ -1,6 +1,6 @@
 package ua.edu.sumdu.j2se.korotya.tasks;
 
-public abstract class AbstractTaskList {
+public abstract class AbstractTaskList implements java.lang.Iterable<Task> {
     public abstract void add(Task task) throws NullPointerException;
     public abstract boolean remove(Task task);
     public abstract int size();
