@@ -1,5 +1,7 @@
 package ua.edu.sumdu.j2se.korotya.tasks;
 
+import java.util.Objects;
+
 public class Task {
     private String title;
     private int time;
@@ -7,6 +9,11 @@ public class Task {
     private int end;
     private int interval;
     private boolean active = false;
+
+    public Task() {
+        title = "No title";
+        time = start = end = interval = 0;
+    }
 
     public Task(String title, int time) throws IllegalArgumentException {
         if (time < 0)
@@ -28,6 +35,57 @@ public class Task {
         this.end = end;
         this.interval = interval;
         time = start;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        if (!active && !task.active)
+            return true;
+
+        if (isRepeated())
+            return start == task.start && end == task.end && interval == task.interval;
+        else
+            return time == task.time;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(time, title);
+    }
+
+    @Override
+    public Task clone() {
+        Task task = new Task();
+        task.title = title;
+        task.time = time;
+        task.start = start;
+        task.end = end;
+        task.interval = interval;
+        task.active = active;
+        return task;
+    }
+
+    @Override
+    public String toString() {
+        if (!isRepeated()) {
+            return "Task{" +
+                    "title='" + title + '\'' +
+                    ", time=" + time +
+                    ", active=" + active +
+                    '}';
+        } else {
+            return "Task{" +
+                    "title='" + title + '\'' +
+                    ", time=" + time +
+                    ", start=" + start +
+                    ", end=" + end +
+                    ", interval=" + interval +
+                    ", active=" + active +
+                    '}';
+        }
     }
 
     /**
@@ -148,7 +206,8 @@ public class Task {
             if(current >= start + interval * countOfInterval)
                 return -1;
             else {
-                int intervalNumber = (int)(((double)(current - start) / interval) + 1.0);
+                int a = (current - start) >= 0 ? (current - start) : -interval;
+                int intervalNumber = (int)(((double)a / interval) + 1.0);
                 return start + interval * intervalNumber;
             }
         }
