@@ -2,6 +2,7 @@ package ua.edu.sumdu.j2se.korotya.tasks;
 
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class LinkedTaskList extends AbstractTaskList {
     private Node first;
@@ -165,6 +166,24 @@ public class LinkedTaskList extends AbstractTaskList {
 
     @Override
     public String toString() {
-        return String.format("LinkedTaskList{size=%d}", size);
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("LinkedTaskList{\n");
+        for (Task task: this) {
+            stringBuilder.append(task).append(",").append("\n");
+        }
+        stringBuilder.append("}\n");
+
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public Stream<Task> getStream() {
+        Stream.Builder<Task> streamBuilder = Stream.builder();
+        for (Task task: this) {
+            streamBuilder.add(task);
+        }
+
+        return streamBuilder.build();
     }
 }

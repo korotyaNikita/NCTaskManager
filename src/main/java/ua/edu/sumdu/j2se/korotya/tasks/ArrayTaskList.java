@@ -3,6 +3,7 @@ package ua.edu.sumdu.j2se.korotya.tasks;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class ArrayTaskList extends AbstractTaskList {
     private Task[] tasks = new Task[10];
@@ -128,6 +129,19 @@ public class ArrayTaskList extends AbstractTaskList {
 
     @Override
     public String toString() {
-        return String.format("ArrayTaskList{size = %d}", size);
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("ArrayTaskList{\n");
+        for (Task task: this) {
+            stringBuilder.append(task).append(",").append("\n");
+        }
+        stringBuilder.append("}\n");
+
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public Stream<Task> getStream() {
+        return Arrays.stream(tasks, 0, size);
     }
 }
