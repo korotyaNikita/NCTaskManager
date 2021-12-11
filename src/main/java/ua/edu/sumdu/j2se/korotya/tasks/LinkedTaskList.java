@@ -1,10 +1,9 @@
 package ua.edu.sumdu.j2se.korotya.tasks;
 
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.stream.Stream;
 
-public class LinkedTaskList extends AbstractTaskList {
+public class LinkedTaskList extends AbstractTaskList implements Cloneable {
     private Node first;
     private Node last;
     private int size;
@@ -149,17 +148,24 @@ public class LinkedTaskList extends AbstractTaskList {
 
     @Override
     public int hashCode() {
-        return Objects.hash(size, last.task.getTitle(), last.task.getStartTime());
+        int hash = 1;
+
+        for (Node temp = first; temp != null; temp = temp.next) {
+            hash = 16 * hash + temp.task.hashCode();
+        }
+
+        return hash;
     }
 
     @Override
-    public LinkedTaskList clone() {
-        LinkedTaskList clone = new LinkedTaskList();
+    public LinkedTaskList clone() throws CloneNotSupportedException {
+        LinkedTaskList clone = (LinkedTaskList) super.clone();
 
-        for (Task o: this) {
-            clone.add(o);
-        }
-        clone.size = size;
+        clone.first = clone.last = null;
+        clone.size = 0;
+
+        for (Node temp = first; temp != null; temp = temp.next)
+            clone.add(temp.task.clone());
 
         return clone;
     }

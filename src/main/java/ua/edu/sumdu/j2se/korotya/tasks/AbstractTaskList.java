@@ -11,12 +11,14 @@ public abstract class AbstractTaskList implements java.lang.Iterable<Task> {
 
     public abstract Stream<Task> getStream();
 
-    public final AbstractTaskList incoming(int from, int to) {
+    /*
+    public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to) {
         AbstractTaskList taskList = TaskListFactory.createTaskList(getType());
         Stream<Task> taskStream = this.getStream()
-                .filter(task -> (task.nextTimeAfter(from) != -1 && task.nextTimeAfter(from) < to));
+                .filter(task -> (task.nextTimeAfter(from) != null && task.nextTimeAfter(from) < to));
 
         taskStream.forEach(taskList::add);
         return taskList;
     }
+    */
 }
