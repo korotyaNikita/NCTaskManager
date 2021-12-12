@@ -1,10 +1,11 @@
 package ua.edu.sumdu.j2se.korotya.tasks;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-public class Task implements Cloneable{
+public class Task implements Cloneable, Serializable {
     private String title;
     private LocalDateTime time;
     private LocalDateTime start;
@@ -41,15 +42,18 @@ public class Task implements Cloneable{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Task)) return false;
         Task task = (Task) o;
-        if (!active && !task.active)
-            return true;
 
-        if (isRepeated())
-            return start.isEqual(task.start) && end.isEqual(task.end) && interval == task.interval;
-        else
-            return time.isEqual(task.time);
+        if (isRepeated()) {
+            return title.equals(task.title)
+                    && start.isEqual(task.start)
+                    && end.isEqual(task.end)
+                    && interval == task.interval
+                    && active == task.active;
+        } else {
+            return title.equals(task.title) && time.isEqual(task.time) && active == task.active;
+        }
     }
 
     @Override
@@ -73,7 +77,6 @@ public class Task implements Cloneable{
         } else {
             return "Task{"
                     + "title='" + title + '\''
-                    + ", time=" + time
                     + ", start=" + start
                     + ", end=" + end
                     + ", interval=" + interval + " seconds"

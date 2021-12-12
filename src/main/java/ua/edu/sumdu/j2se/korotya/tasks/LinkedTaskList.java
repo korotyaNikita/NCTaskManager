@@ -38,18 +38,20 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
     @Override
     public boolean remove(Task task) {
         for (Node temp = first; temp != null; temp = temp.next) {
-            if (temp.task == task) {
+            if (temp.task.equals(task)) {
                 if (temp.prev == null) {
                     first = temp.next;
                 }
-                else if (temp.next == null) {
+                else {
+                    temp.prev.next = temp.next;
+                }
+
+                if (temp.next == null) {
                     last = temp.prev;
                 }
                 else {
                     temp.next.prev = temp.prev;
-                    temp.prev.next = temp.next;
                 }
-
                 size--;
                 return true;
             }
@@ -133,8 +135,9 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof LinkedTaskList)) return false;
         LinkedTaskList that = (LinkedTaskList) o;
+
         if (size != that.size) return false;
 
         Iterator<Task> j = iterator();

@@ -13,8 +13,9 @@ public class Tasks {
         Stream<Task> taskStream = StreamSupport.stream(tasks.spliterator(), false);
         LinkedTaskList taskList = new LinkedTaskList();
 
-        taskStream.filter(task -> task.nextTimeAfter(start) != null)
-                .filter(task -> task.nextTimeAfter(start).compareTo(end) <= 0)
+        taskStream.filter(task -> task.nextTimeAfter(start) != null
+                        && task.nextTimeAfter(start).compareTo(end) <= 0)
+                .distinct()
                 .forEach(taskList::add);
 
         return taskList;
