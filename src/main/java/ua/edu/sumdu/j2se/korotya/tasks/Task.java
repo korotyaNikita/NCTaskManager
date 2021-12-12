@@ -1,22 +1,23 @@
 package ua.edu.sumdu.j2se.korotya.tasks;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-public class Task {
+public class Task implements Cloneable{
     private String title;
-    private int time;
-    private int start;
-    private int end;
+    private LocalDateTime time;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private int interval;
-    private boolean active = false;
+    private boolean active;
 
     public Task() {
         title = "No title";
-        time = start = end = interval = 0;
     }
 
-    public Task(String title, int time) throws IllegalArgumentException {
-        if (time < 0)
+    public Task(String title, LocalDateTime time) {
+        if (time == null)
             throw new IllegalArgumentException();
 
         this.title = title;
@@ -26,8 +27,8 @@ public class Task {
         interval = 0;
     }
 
-    public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
-        if (start < 0 || end < 0 || interval < 0)
+    public Task(String title, LocalDateTime start, LocalDateTime end, int interval)  {
+        if (start == null || end == null || interval < 0)
             throw new IllegalArgumentException();
 
         this.title = title;
@@ -46,45 +47,38 @@ public class Task {
             return true;
 
         if (isRepeated())
-            return start == task.start && end == task.end && interval == task.interval;
+            return start.isEqual(task.start) && end.isEqual(task.end) && interval == task.interval;
         else
-            return time == task.time;
+            return time.isEqual(task.time);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(time, title);
+        return Objects.hash(title, time, interval, active);
     }
 
     @Override
-    public Task clone() {
-        Task task = new Task();
-        task.title = title;
-        task.time = time;
-        task.start = start;
-        task.end = end;
-        task.interval = interval;
-        task.active = active;
-        return task;
+    public Task clone() throws CloneNotSupportedException {
+        return (Task) super.clone();
     }
 
     @Override
     public String toString() {
         if (!isRepeated()) {
-            return "Task{" +
-                    "title='" + title + '\'' +
-                    ", time=" + time +
-                    ", active=" + active +
-                    '}';
+            return "Task{"
+                    + "title='" + title + '\''
+                    + ", time=" + time
+                    + ", active=" + active
+                    + '}';
         } else {
-            return "Task{" +
-                    "title='" + title + '\'' +
-                    ", time=" + time +
-                    ", start=" + start +
-                    ", end=" + end +
-                    ", interval=" + interval +
-                    ", active=" + active +
-                    '}';
+            return "Task{"
+                    + "title='" + title + '\''
+                    + ", time=" + time
+                    + ", start=" + start
+                    + ", end=" + end
+                    + ", interval=" + interval + " seconds"
+                    + ", active=" + active
+                    + '}';
         }
     }
 
@@ -121,7 +115,7 @@ public class Task {
      * @return time у разі, якщо задача повторюється
      * метод повертає час початку повторення
      */
-    public int getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 
@@ -130,7 +124,7 @@ public class Task {
      * У разі, якщо задача повторювалась, вона стає такою,
      * що не повторюється
      */
-    public void setTime(int time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
 
         if(interval != 0) {
@@ -145,7 +139,7 @@ public class Task {
      * @return start у разі, якщо задача не повторюється метод повертає час
      * виконання задачі
      */
-    public int getStartTime() {
+    public LocalDateTime getStartTime() {
         return start;
     }
 
@@ -154,7 +148,7 @@ public class Task {
      * @return end у разі, якщо задача не повторюється метод повертає час
      * виконання задачі
      */
-    public int getEndTime() {
+    public LocalDateTime getEndTime() {
         return end;
     }
 
@@ -174,8 +168,8 @@ public class Task {
      * @param end час закінчення виконання
      * @param interval інтервал повторення
      */
-    public void setTime(int start, int end, int interval) {
-        if(this.interval == 0)
+    public void setTime(LocalDateTime start, LocalDateTime end, int interval) {
+        if (this.interval == 0)
             time = start;
 
         this.start = start;
@@ -195,25 +189,29 @@ public class Task {
     /**
      * Метод повертає час наступного виконання задачі після вказаного часу
      * Якщо після вказаного часу задача не виконується або задача не активна,
-     * метод повертає -1
+     * метод повертає null
      */
-    public int nextTimeAfter(int current) {
-        if(!isActive()) return -1;
+    public LocalDateTime nextTimeAfter(LocalDateTime current) {
+        if (current == null)
+            throw new IllegalArgumentException();
 
-        if(isRepeated()) {
-            int countOfInterval = (end - start) / interval;
+        if (!isActive()) return null;
 
-            if(current >= start + interval * countOfInterval)
-                return -1;
+        if (isRepeated()) {
+            ChronoUnit seconds = ChronoUnit.SECONDS;
+            long countOfInterval = seconds.between(start, end) / interval;
+
+            if(current.compareTo(start.plusSeconds(interval * countOfInterval)) >= 0)
+                return null;
             else {
-                int a = (current - start) >= 0 ? (current - start) : -interval;
+                long a = current.compareTo(start) >= 0 ? seconds.between(start, current) : -interval;
                 int intervalNumber = (int)(((double)a / interval) + 1.0);
-                return start + interval * intervalNumber;
+                return start.plusSeconds((long) interval * intervalNumber);
             }
         }
         else {
-            if (current >= time)
-                return -1;
+            if (current.compareTo(time) >= 0)
+                return null;
             else
                 return time;
         }

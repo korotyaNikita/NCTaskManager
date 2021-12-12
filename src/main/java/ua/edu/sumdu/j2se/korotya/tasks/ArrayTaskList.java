@@ -2,10 +2,9 @@ package ua.edu.sumdu.j2se.korotya.tasks;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.stream.Stream;
 
-public class ArrayTaskList extends AbstractTaskList {
+public class ArrayTaskList extends AbstractTaskList implements Cloneable {
     private Task[] tasks = new Task[10];
     private int size;
 
@@ -116,15 +115,22 @@ public class ArrayTaskList extends AbstractTaskList {
 
     @Override
     public int hashCode() {
-        return Objects.hash(size, tasks[0].getStartTime(), tasks[0].getTitle());
+        int hash = 1;
+        for (int i = 0; i < size; i++) {
+            hash = 16 * hash + tasks[i].hashCode();
+        }
+
+        return hash;
     }
 
     @Override
-    public ArrayTaskList clone() {
-        ArrayTaskList arrayTaskList = new ArrayTaskList();
-        arrayTaskList.tasks = Arrays.copyOf(tasks, size);
-        arrayTaskList.size = size;
-        return arrayTaskList;
+    public ArrayTaskList clone() throws CloneNotSupportedException {
+        ArrayTaskList clone = (ArrayTaskList) super.clone();
+        clone.tasks = Arrays.copyOf(tasks, size);
+        for (int i = 0; i < size; i++) {
+            clone.tasks[i] = tasks[i].clone();
+        }
+        return clone;
     }
 
     @Override
