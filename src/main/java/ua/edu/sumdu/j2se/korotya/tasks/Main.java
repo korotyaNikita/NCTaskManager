@@ -1,5 +1,6 @@
 package ua.edu.sumdu.j2se.korotya.tasks;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Iterator;
@@ -42,16 +43,24 @@ public class Main {
 		a.add(task2);
 		a.add(task3);
 		a.add(task5);
+		a.add(task5);
+		a.add(task5);
+		a.add(task1);
+		a.add(task2);
+
 
 		b.add(task4);
 		b.add(task2);
-		System.out.println(a.hashCode());
-		System.out.println(a.hashCode());
+		System.out.println(a);
+		System.out.println(a.clone().hashCode());
 		System.out.println(b.hashCode());
 		System.out.println(a.getStream().count());
 		System.out.println(a.getStream().collect(Collectors.toList()));
 
 
+		a.add(task3);
+		a.add(task5);
+		a.add(task2);
 		System.out.println(a);
 		System.out.println(a.clone());
 		System.out.println(b);
@@ -82,5 +91,17 @@ public class Main {
 
 		System.out.println();
 		System.out.println(a);
+
+		File file = new File("d:\\file.txt");
+		TaskIO.writeBinary(a, file);
+		LinkedTaskList linkedTaskList = new LinkedTaskList();
+		TaskIO.readBinary(linkedTaskList, file);
+		System.out.println(linkedTaskList);
+
+		file = new File("d:\\js.json");
+		TaskIO.writeText(a, file);
+		linkedTaskList = new LinkedTaskList();
+		TaskIO.readText(linkedTaskList, file);
+		System.out.println(linkedTaskList);
 	}
 }
