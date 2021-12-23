@@ -41,23 +41,23 @@ public abstract class Controller {
             view.showMessage("Операция отменена.");
             log.info("Операция отменена");
         }
-        backMenu();
         notificationThread.setTaskList(taskList);
         TaskIO.writeBinary(taskList, new File("tasks.txt"));
+        backMenu();
     }
 
     public void removeTask() {
         view.removeTask(taskList);
-        backMenu();
         notificationThread.setTaskList(taskList);
         TaskIO.writeBinary(taskList, new File("tasks.txt"));
+        backMenu();
     }
 
     public void changeTask() {
         view.changeTask(taskList);
-        backMenu();
         notificationThread.setTaskList(taskList);
         TaskIO.writeBinary(taskList, new File("tasks.txt"));
+        backMenu();
     }
 
     public void showTasks() {
