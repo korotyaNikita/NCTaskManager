@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.korotya.tasks;
+package ua.edu.sumdu.j2se.korotya.tasks.model;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -137,11 +137,9 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("ArrayTaskList{\n");
         for (Task task: this) {
-            stringBuilder.append(task).append(",").append("\n");
+            stringBuilder.append(task).append(";").append("\n");
         }
-        stringBuilder.append("}\n");
 
         return stringBuilder.toString();
     }

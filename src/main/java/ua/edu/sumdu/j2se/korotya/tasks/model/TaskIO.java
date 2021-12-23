@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.korotya.tasks;
+package ua.edu.sumdu.j2se.korotya.tasks.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

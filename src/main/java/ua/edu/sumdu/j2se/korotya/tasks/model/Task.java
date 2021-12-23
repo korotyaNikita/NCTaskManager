@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.korotya.tasks;
+package ua.edu.sumdu.j2se.korotya.tasks.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -29,7 +29,7 @@ public class Task implements Cloneable, Serializable {
     }
 
     public Task(String title, LocalDateTime start, LocalDateTime end, int interval)  {
-        if (start == null || end == null || interval < 0)
+        if (start == null || end == null || interval < 0 || start.isAfter(end))
             throw new IllegalArgumentException();
 
         this.title = title;
@@ -69,19 +69,16 @@ public class Task implements Cloneable, Serializable {
     @Override
     public String toString() {
         if (!isRepeated()) {
-            return "Task{"
-                    + "title='" + title + '\''
+            return "title='" + title + '\''
                     + ", time=" + time
-                    + ", active=" + active
-                    + '}';
-        } else {
-            return "Task{"
-                    + "title='" + title + '\''
+                    + ", active=" + active;
+        }
+        else {
+            return "title='" + title + '\''
                     + ", start=" + start
                     + ", end=" + end
                     + ", interval=" + interval + " seconds"
-                    + ", active=" + active
-                    + '}';
+                    + ", active=" + active;
         }
     }
 
